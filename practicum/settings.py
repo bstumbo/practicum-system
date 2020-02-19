@@ -25,7 +25,7 @@ SECRET_KEY = '-#z!o2_^3f4kfyt29lvl8*cxnp)h2qzu5_e1d*f*npp9mc-d-^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'catalog'
+    'gw_practicum',
 ]
 
 MIDDLEWARE = [
@@ -80,8 +80,8 @@ DATABASES = {
         'NAME': 'gwsph_practicum',
         'USER': 'root',
         'PASSWORD': 'root',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'HOST': '',
+        'PORT': '',
     }
 }
 
@@ -103,6 +103,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTH_USER_MODEL = 'gw_practicum.User'
 
 
 # Internationalization
