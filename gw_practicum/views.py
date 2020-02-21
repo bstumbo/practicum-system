@@ -1,17 +1,24 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.shortcuts import redirect
+from django.contrib.auth import views as auth_views
 
 # Create your views here.
 
 def index(request):
-    return HttpResponse("Homepage")
+    user = request.user
+    if user.is_authenticated:
+        return render(request, 'general/index.html')
+    else:
+        return redirect('login')
+
 """
     STUDENT VIEWS
 """
 
 def student(request):
     response = "Student Homepage"
-    return HttpResponse(response)
+    return render(request, 'student/index.html')
 
 def studentPlan(request, projectplan_id='None'):
     response = "Student Project Plan Form"
