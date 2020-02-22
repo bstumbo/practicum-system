@@ -1,14 +1,21 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.shortcuts import redirect
-from django.contrib.auth import views as auth_views
+
 
 # Create your views here.
 
 def index(request):
     user = request.user
     if user.is_authenticated:
-        return render(request, 'general/index.html')
+        group = {
+            'Students': 'student/index.html',
+            'PracticumDirectors': 'practicum-director/index.html',
+            'Preceptors': 'preceptor/index.html'
+        }
+        template = group.get(str(user.groups.first()), 'general/index.html')
+
+        return render(request, template)
     else:
         return redirect('login')
 
