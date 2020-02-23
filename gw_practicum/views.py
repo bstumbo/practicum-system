@@ -1,6 +1,8 @@
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.shortcuts import redirect
+from .models import PracticumPlan
 
 
 # Create your views here.
@@ -14,8 +16,10 @@ def index(request):
             'Preceptors': 'preceptor/index.html'
         }
         template = group.get(str(user.groups.first()), 'general/index.html')
-
-        return render(request, template)
+        context = {
+            'name': user.get_full_name()
+        }
+        return render(request, template, context)
     else:
         return redirect('login')
 
@@ -28,8 +32,10 @@ def student(request):
     return render(request, 'student/index.html')
 
 def studentPlan(request, projectplan_id='None'):
-    response = "Student Project Plan Form"
-    return HttpResponse(response)
+    return render(request, 'student/projectplan.html')
+
+def submitStudentPlan(request):
+    return HttpResponseRedirect('/')
 
 def studentMidpoint(request, midpointevaluation_id='None'):
     response = "Student Midpoint Evaluation"
