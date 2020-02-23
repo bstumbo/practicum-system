@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 from .models import User
 from .models import Site
 from .models import Preceptor
@@ -8,8 +9,13 @@ from .models import Major
 from .models import Student
 from .models import PracticumDirector
 
+
 # Register your models here.
-admin.site.register(User)
+class AllUserAdmin(UserAdmin):
+    pass
+
+
+admin.site.register(User, AllUserAdmin)
 admin.site.register(Site)
 admin.site.register(Preceptor)
 admin.site.register(Department)
