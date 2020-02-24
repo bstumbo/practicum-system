@@ -37,7 +37,7 @@ def studentPlan(request, projectplan_id='None'):
         submittedForm = StudentPlanForm(request.POST)
         if submittedForm.is_valid():
             submittedForm.save()
-            return HttpResponseRedirect('student')
+            return HttpResponseRedirect('/student')
     else:
         form = StudentPlanForm()
     return render(request, 'student/projectplan.html', {'form': form})

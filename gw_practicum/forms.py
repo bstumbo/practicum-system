@@ -9,7 +9,8 @@ from .models import PracticumPlan
 class StudentPlanForm(forms.ModelForm):
     class Meta:
         model = PracticumPlan
-        fields = '__all__'
+        exclude = ['preceptor_approval', 'pd_approval']
+
     # title = forms.CharField(label='Plan title', max_length=255, required=True)
     # department = forms.ModelChoiceField(queryset=Department.objects.all(), label='Department', required=True)
     # competencies = forms.CharField(label='Competencies', required=True, widget=forms.Textarea)
