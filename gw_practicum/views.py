@@ -33,11 +33,14 @@ def student(request):
     return render(request, 'student/index.html')
 
 def studentPlan(request, projectplan_id='None'):
-    form = StudentPlanForm()
+    if request.method == 'POST':
+        submittedForm = StudentPlanForm(request.POST)
+        if submittedForm.is_valid():
+            submittedForm.save()
+            return HttpResponseRedirect('student')
+    else:
+        form = StudentPlanForm()
     return render(request, 'student/projectplan.html', {'form': form})
-
-def submitStudentPlan(request):
-    return HttpResponseRedirect('/')
 
 def studentMidpoint(request, midpointevaluation_id='None'):
     response = "Student Midpoint Evaluation"
