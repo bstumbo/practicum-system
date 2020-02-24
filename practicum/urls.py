@@ -28,7 +28,6 @@ urlpatterns = [
     # STUDENT PATHS
     path('student', views.student, name='student'),
     path('student/practicum-plan', views.studentPlan, name='student-plan-form'),
-    path('student/practicum-plan/submit', views.submitStudentPlan, name='submit-student-plan'),
     path('student/practicum-plan/<int:projectplan_id>', views.studentPlan, name='student-plan'),
     path('student/midpoint', views.studentMidpoint, name='student-midpoint-form'),
     path('student/midpoint/<int:midpointevaluation_id', views.studentMidpoint, name='student-midpoint'),

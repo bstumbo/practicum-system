@@ -1,6 +1,6 @@
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-<form action="student/practicum-plan/submit" method="post">
+<form action="practicum-plan" method="post">
 {% csrf_token %}
     {{ form.as_p }}
 <input type="submit" value="submit">
