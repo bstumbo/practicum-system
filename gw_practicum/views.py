@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.shortcuts import redirect
+from .forms import StudentPlanForm
 from .models import PracticumPlan
 
 
@@ -32,7 +33,8 @@ def student(request):
     return render(request, 'student/index.html')
 
 def studentPlan(request, projectplan_id='None'):
-    return render(request, 'student/projectplan.html')
+    form = StudentPlanForm()
+    return render(request, 'student/projectplan.html', {'form': form})
 
 def submitStudentPlan(request):
     return HttpResponseRedirect('/')
