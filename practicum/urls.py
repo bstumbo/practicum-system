@@ -39,6 +39,8 @@ urlpatterns = [
     path('preceptor', views.preceptor, name='preceptor'),
     path('preceptor/practicum-plan/<int:practicum_plan_id>', views.preceptorPracticumPlanApproval,
          name='preceptor-practicum-plan-approval'),
+    path('preceptor/practicum-plan/approve/<int:practicum_plan_id>', views.preceptorPracticumPlanApproval,
+         name='preceptor-practicum-plan-approval-approve'),
     path('preceptor/midpoint-evaluation/<int:midpointevaluation_id>', views.preceptorMidpointApproval,
          name='preceptor-midpoint-approval'),
     path('preceptor/final-evaluation/<int:preceptor_final_evaluation_id>', views.preceptorFinalEvalution,

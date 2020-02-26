@@ -90,8 +90,13 @@ def preceptor(request):
         return redirect('login')
 
 def preceptorPracticumPlanApproval(request, practicum_plan_id):
-    response = "Preceptor Practicum Plan Approval"
-    return HttpResponse(response)
+    studentPlan = PracticumPlan.objects.get(id=practicum_plan_id)
+    if 'approve' in request.get_full_path():
+        studentPlan.preceptor_approval = True
+        studentPlan.save()
+        return HttpResponseRedirect('/preceptor')
+    else:
+        return render(request, 'preceptor/projectplanapproval.html', {'plan': studentPlan})
 
 def preceptorMidpointApproval(request, midpointevaluation_i):
     response = "Preceptor Midpoint Evaluation Approval"
