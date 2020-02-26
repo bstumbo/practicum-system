@@ -1,8 +1,18 @@
 <h1>Hello, {{ name }}.</h1>
 
 <div>
-    <a href="student/practicum-plan">Submit a Plan</a>
+    <a href="student/practicum-plan">Submit a New Plan</a>
 </div>
 
-<div id="plans"></div>
+<div id="plans">
+    {% if plans %}
+        <ul>
+        {% for plan in plans %}
+            <li>
+                <a href="practicum-plan/{{ plan.id }}">{{ plan.title }}</a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</div>
 

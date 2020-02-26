@@ -4,6 +4,10 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from .forms import StudentPlanForm
 from .models import PracticumPlan
+from .models import Preceptor
+from .models import PracticumDirector
+from .models import Site
+from .models import Student
 
 
 # Create your views here.
@@ -12,15 +16,12 @@ def index(request):
     user = request.user
     if user.is_authenticated:
         group = {
-            'Students': 'student/index.html',
-            'PracticumDirectors': 'practicum-director/index.html',
-            'Preceptors': 'preceptor/index.html'
+            'Students': 'student',
+            'PracticumDirectors': 'practicum-director',
+            'Preceptors': 'preceptor'
         }
-        template = group.get(str(user.groups.first()), 'general/index.html')
-        context = {
-            'name': user.get_full_name()
-        }
-        return render(request, template, context)
+        section = group.get(str(user.groups.first()), '/')
+        return redirect(section)
     else:
         return redirect('login')
 
@@ -29,12 +30,25 @@ def index(request):
 """
 
 def student(request):
-    response = "Student Homepage"
-    return render(request, 'student/index.html')
+    user = request.user
+    if user.is_authenticated and str(user.groups.first()) == 'Students':
+        student = Student.objects.all().filter(user_data_id=user.id).first()
+        context = {
+            'name': user.get_full_name(),
+            'plans': PracticumPlan.objects.all().filter(student_id=student.id)
+        }
+        return render(request, 'student/index.html', context)
+    else:
+        return redirect('login')
 
 def studentPlan(request, projectplan_id='None'):
     if request.method == 'POST':
         submittedForm = StudentPlanForm(request.POST)
+        # submittedForm.student = request.user.id
+        # submittedForm.preceptor = Preceptor.objects.all().filter(user_data__username=request.POST['preceptor']).first()
+        # submittedForm.site = Site.objects.all().filter(name=request.POST['site']).first()
+        # submittedForm.practicum_director = PracticumDirector.objects.all().filter(
+        #     user_data__username=request.POST['practicum_director']).first()
         if submittedForm.is_valid():
             submittedForm.save()
             return HttpResponseRedirect('/student')
