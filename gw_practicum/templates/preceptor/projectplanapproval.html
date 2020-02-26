@@ -1,0 +1,16 @@
+{% extends 'general/base.html' %}
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+{% block content %}
+    <div class="container-fluid">
+        <h1 class="mt-4">Project plan</h1>
+        <div>
+            {{ plan.title }}
+        </div>
+        {% if plan.preceptor_approval != 'None' %}
+            <a href="/preceptor/practicum-plan/approve/{{ plan.id }}" class="btn btn-primary">Approve Plan</a>
+        {% else %}
+            <p>Approved</p>
+        {% endif %}
+    </div>
+{% endblock content %}
