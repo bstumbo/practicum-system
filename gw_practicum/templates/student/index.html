@@ -5,11 +5,12 @@
 </div>
 
 <div id="plans">
+<h2>Your Plans</h2>
     {% if plans %}
         <ul>
         {% for plan in plans %}
             <li>
-                <a href="practicum-plan/{{ plan.id }}">{{ plan.title }}</a>
+                <a href="student/practicum-plan/{{ plan.id }}">{{ plan.title }}</a>
             </li>
         {% endfor %}
         </ul>

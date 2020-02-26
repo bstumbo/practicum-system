@@ -32,10 +32,10 @@ def index(request):
 def student(request):
     user = request.user
     if user.is_authenticated and str(user.groups.first()) == 'Students':
-        student = Student.objects.all().filter(user_data_id=user.id).first()
+        authStudent = Student.objects.all().filter(user_data_id=user.id).first()
         context = {
             'name': user.get_full_name(),
-            'plans': PracticumPlan.objects.all().filter(student_id=student.id)
+            'plans': PracticumPlan.objects.all().filter(student_id=authStudent.id)
         }
         return render(request, 'student/index.html', context)
     else:
@@ -44,14 +44,11 @@ def student(request):
 def studentPlan(request, projectplan_id='None'):
     if request.method == 'POST':
         submittedForm = StudentPlanForm(request.POST)
-        # submittedForm.student = request.user.id
-        # submittedForm.preceptor = Preceptor.objects.all().filter(user_data__username=request.POST['preceptor']).first()
-        # submittedForm.site = Site.objects.all().filter(name=request.POST['site']).first()
-        # submittedForm.practicum_director = PracticumDirector.objects.all().filter(
-        #     user_data__username=request.POST['practicum_director']).first()
         if submittedForm.is_valid():
             submittedForm.save()
             return HttpResponseRedirect('/student')
+    elif request.method == 'GET' and projectplan_id != 'None':
+        form = StudentPlanForm(instance=PracticumPlan.objects.get(id=projectplan_id))
     else:
         form = StudentPlanForm()
     return render(request, 'student/projectplan.html', {'form': form})
