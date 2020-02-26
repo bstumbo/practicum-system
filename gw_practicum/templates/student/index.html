@@ -1,8 +1,21 @@
 <h1>Hello, {{ name }}.</h1>
 
 <div>
-    <a href="student/practicum-plan">Submit a Plan</a>
+    <a href="student/practicum-plan">Submit a New Plan</a>
 </div>
 
-<div id="plans"></div>
+<div id="plans">
+<h2>Your Plans</h2>
+    {% if plans %}
+        <ul>
+        {% for plan in plans %}
+            <li>
+                <a href="student/practicum-plan/{{ plan.id }}">{{ plan.title }}</a>
+                PD Approved: {{ plan.pd_approval }}
+                Preceptor Approved: {{ plan.preceptor_approval }}
+            </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</div>
 

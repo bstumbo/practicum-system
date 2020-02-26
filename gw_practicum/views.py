@@ -4,6 +4,10 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from .forms import StudentPlanForm
 from .models import PracticumPlan
+from .models import Preceptor
+from .models import PracticumDirector
+from .models import Site
+from .models import Student
 
 
 # Create your views here.
@@ -12,15 +16,12 @@ def index(request):
     user = request.user
     if user.is_authenticated:
         group = {
-            'Students': 'student/index.html',
-            'PracticumDirectors': 'practicum-director/index.html',
-            'Preceptors': 'preceptor/index.html'
+            'Students': 'student',
+            'PracticumDirectors': 'practicum-director',
+            'Preceptors': 'preceptor'
         }
-        template = group.get(str(user.groups.first()), 'general/index.html')
-        context = {
-            'name': user.get_full_name()
-        }
-        return render(request, template, context)
+        section = group.get(str(user.groups.first()), '/')
+        return redirect(section)
     else:
         return redirect('login')
 
@@ -29,18 +30,32 @@ def index(request):
 """
 
 def student(request):
-    response = "Student Homepage"
-    return render(request, 'student/index.html')
+    user = request.user
+    if user.is_authenticated and str(user.groups.first()) == 'Students':
+        authStudent = Student.objects.all().filter(user_data_id=user.id).first()
+        context = {
+            'name': user.get_full_name(),
+            'plans': PracticumPlan.objects.all().filter(student_id=authStudent.id)
+        }
+        return render(request, 'student/index.html', context)
+    else:
+        return redirect('login')
 
 def studentPlan(request, projectplan_id='None'):
+    action = '/student/practicum-plan/' + str(projectplan_id) if projectplan_id != 'None' else '/student/practicum-plan'
     if request.method == 'POST':
-        submittedForm = StudentPlanForm(request.POST)
+        if projectplan_id != 'None':
+            submittedForm = StudentPlanForm(instance=PracticumPlan.objects.get(id=projectplan_id), data=request.POST)
+        else:
+            submittedForm = StudentPlanForm(request.POST)
         if submittedForm.is_valid():
             submittedForm.save()
             return HttpResponseRedirect('/student')
+    elif request.method == 'GET' and projectplan_id != 'None':
+        form = StudentPlanForm(instance=PracticumPlan.objects.get(id=projectplan_id))
     else:
         form = StudentPlanForm()
-    return render(request, 'student/projectplan.html', {'form': form})
+    return render(request, 'student/projectplan.html', {'form': form, 'action': action})
 
 def studentMidpoint(request, midpointevaluation_id='None'):
     response = "Student Midpoint Evaluation"
