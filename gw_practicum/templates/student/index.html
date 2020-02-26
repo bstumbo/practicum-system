@@ -1,24 +1,48 @@
 {% extends 'general/base.html' %}
 {% block content %}
-<h1>Hello, {{ name }}.</h1>
-
-<div>
-    <a href="student/practicum-plan">Submit a New Plan</a>
-</div>
-
-<div id="plans">
-<h2>Your Plans</h2>
-    {% if plans %}
-        <ul>
-        {% for plan in plans %}
-            <li>
-                <a href="student/practicum-plan/{{ plan.id }}">{{ plan.title }}</a>
-                PD Approved: {{ plan.pd_approval }}
-                Preceptor Approved: {{ plan.preceptor_approval }}
-            </li>
-        {% endfor %}
-        </ul>
-    {% endif %}
-</div>
+    <div class="container-fluid">
+        <h1 class="mt-4">{{ name }}'s Dashboard</h1>
+        <div class="card mb-4">
+            <a class="btn btn-primary" href="student/practicum-plan">Submit a New Plan</a>
+            <div class="card-header"><i class="fas fa-table mr-1"></i>Your Plans</div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Preceptor</th>
+                                <th>Practicum Director</th>
+                                <th>Track Hours</th>
+                                <th>Edit</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Title</th>
+                                <th>Practicum Director</th>
+                                <th>Preceptor Approval</th>
+                                <th>Track Hours</th>
+                                <th>Edit</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% if plans %}
+                                {% for plan in plans %}
+                                    <tr>
+                                        <td><a href="student/practicum-plan/{{ plan.id }}">{{ plan.title }}</a></td>
+                                        <td>{{ plan.pd_approval }}</td>
+                                        <td>{{ plan.preceptor_approval }}</td>
+                                        <td>TBD</td>
+                                        <td><a href="student/practicum-plan/{{ plan.id }}">Edit</a></td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock content %}
 
