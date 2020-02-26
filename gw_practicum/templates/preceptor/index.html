@@ -1,3 +1,87 @@
-<h1>Hello, name.  Welcome Preceptor!</h1>
+{% extends 'general/base.html' %}
+{% block content %}
+    <div class="container-fluid">
+        <h1 class="mt-4">{{ name }}'s Dashboard</h1>
+        <div class="card mb-4">
+            <div class="card-header"><i class="fas fa-table mr-1"></i>Pending Practicums</div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Preceptor</th>
+                                <th>Practicum Director</th>
+                                <th>Total Hours</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Title</th>
+                                <th>Practicum Director</th>
+                                <th>Preceptor Approval</th>
+                                <th>Total Hours</th>
+                                <th>Actions</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% if pendingPlans %}
+                                {% for plan in pendingPlans %}
+                                    <tr>
+                                        <td><a href="preceptor/practicum-plan/{{ plan.id }}">{{ plan.title }}</a></td>
+                                        <td>{{ plan.pd_approval }}</td>
+                                        <td>{{ plan.preceptor_approval }}</td>
+                                        <td>TBD</td>
+                                        <td><a href="preceptor/practicum-plan/{{ plan.id }}">Approve</a></td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-header"><i class="fas fa-table mr-1"></i>Active Practicums</div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Preceptor</th>
+                                <th>Practicum Director</th>
+                                <th>Total Hours</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Title</th>
+                                <th>Practicum Director</th>
+                                <th>Preceptor Approval</th>
+                                <th>Total Hours</th>
+                                <th>Actions</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% if activePlans %}
+                                {% for plan in activePlans %}
+                                    <tr>
+                                        <td><a href="preceptor/practicum-plan/{{ plan.id }}">{{ plan.title }}</a></td>
+                                        <td>{{ plan.pd_approval }}</td>
+                                        <td>{{ plan.preceptor_approval }}</td>
+                                        <td>TBD</td>
+                                        <td><a href="preceptor/practicum-plan/{{ plan.id }}">Approve</a></td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
 
-<p>Here is your stuff below</p>

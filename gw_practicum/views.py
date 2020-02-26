@@ -74,13 +74,20 @@ def preceptorSelfEvaluation(request, preceptor_evaluation_id='None'):
     PRECEPTOR VIEWS
 """
 
-def preceptorSelfEvaluation(request, preceptor_evaluation_id='None'):
-    response = "Student Preceptor Evaluation"
-    return HttpResponse(response)
-
 def preceptor(request):
-    response = "Preceptor Homepage"
-    return HttpResponse(response)
+    user = request.user
+    if user.is_authenticated and str(user.groups.first()) == 'Preceptors':
+        authPreceptor = Preceptor.objects.all().filter(user_data_id=user.id).first()
+        allPlans = PracticumPlan.objects.all().filter(preceptor_id=authPreceptor.id)
+        context = {
+            'name': user.get_full_name(),
+            'pendingPlans': allPlans.all().filter(preceptor_approval=None, pd_approval=True),
+            'activePlans': allPlans.all().filter(preceptor_approval=True, pd_approval=True),
+            'userType': 'preceptor'
+        }
+        return render(request, 'preceptor/index.html', context)
+    else:
+        return redirect('login')
 
 def preceptorPracticumPlanApproval(request, practicum_plan_id):
     response = "Preceptor Practicum Plan Approval"
@@ -92,6 +99,10 @@ def preceptorMidpointApproval(request, midpointevaluation_i):
 
 def preceptorFinalEvalution(request, preceptor_final_evaluation_id):
     response = "Preceptor Practicum Plan Approval"
+    return HttpResponse(response)
+
+def preceptorSelfEvaluation(request, preceptor_evaluation_id='None'):
+    response = "Student Preceptor Evaluation"
     return HttpResponse(response)
 
 """
