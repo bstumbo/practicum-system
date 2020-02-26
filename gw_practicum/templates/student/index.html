@@ -11,6 +11,8 @@
         {% for plan in plans %}
             <li>
                 <a href="student/practicum-plan/{{ plan.id }}">{{ plan.title }}</a>
+                PD Approved: {{ plan.pd_approval }}
+                Preceptor Approved: {{ plan.preceptor_approval }}
             </li>
         {% endfor %}
         </ul>

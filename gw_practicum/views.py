@@ -42,8 +42,12 @@ def student(request):
         return redirect('login')
 
 def studentPlan(request, projectplan_id='None'):
+    action = '/student/practicum-plan/' + str(projectplan_id) if projectplan_id != 'None' else '/student/practicum-plan'
     if request.method == 'POST':
-        submittedForm = StudentPlanForm(request.POST)
+        if projectplan_id != 'None':
+            submittedForm = StudentPlanForm(instance=PracticumPlan.objects.get(id=projectplan_id), data=request.POST)
+        else:
+            submittedForm = StudentPlanForm(request.POST)
         if submittedForm.is_valid():
             submittedForm.save()
             return HttpResponseRedirect('/student')
@@ -51,7 +55,7 @@ def studentPlan(request, projectplan_id='None'):
         form = StudentPlanForm(instance=PracticumPlan.objects.get(id=projectplan_id))
     else:
         form = StudentPlanForm()
-    return render(request, 'student/projectplan.html', {'form': form})
+    return render(request, 'student/projectplan.html', {'form': form, 'action': action})
 
 def studentMidpoint(request, midpointevaluation_id='None'):
     response = "Student Midpoint Evaluation"
