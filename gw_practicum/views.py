@@ -35,7 +35,8 @@ def student(request):
         authStudent = Student.objects.all().filter(user_data_id=user.id).first()
         context = {
             'name': user.get_full_name(),
-            'plans': PracticumPlan.objects.all().filter(student_id=authStudent.id)
+            'plans': PracticumPlan.objects.all().filter(student_id=authStudent.id),
+            'userType': 'student'
         }
         return render(request, 'student/index.html', context)
     else:
