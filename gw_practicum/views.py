@@ -10,8 +10,6 @@ from .models import Site
 from .models import Student
 
 
-# Create your views here.
-
 def index(request):
     user = request.user
     if user.is_authenticated:
@@ -29,6 +27,7 @@ def index(request):
     STUDENT VIEWS
 """
 
+
 def student(request):
     user = request.user
     if user.is_authenticated and str(user.groups.first()) == 'Students':
@@ -41,6 +40,7 @@ def student(request):
         return render(request, 'student/index.html', context)
     else:
         return redirect('login')
+
 
 def studentPlan(request, projectplan_id='None'):
     action = '/student/practicum-plan/' + str(projectplan_id) if projectplan_id != 'None' else '/student/practicum-plan'
@@ -58,13 +58,16 @@ def studentPlan(request, projectplan_id='None'):
         form = StudentPlanForm()
     return render(request, 'student/projectplan.html', {'form': form, 'action': action})
 
+
 def studentMidpoint(request, midpointevaluation_id='None'):
     response = "Student Midpoint Evaluation"
     return HttpResponse(response)
 
+
 def studentSelfEvaluation(request, selfevaluation_id='None'):
     response = "Student Self Evaluation"
     return HttpResponse(response)
+
 
 def preceptorSelfEvaluation(request, preceptor_evaluation_id='None'):
     response = "Student Preceptor Evaluation"
@@ -73,6 +76,7 @@ def preceptorSelfEvaluation(request, preceptor_evaluation_id='None'):
 """
     PRECEPTOR VIEWS
 """
+
 
 def preceptor(request):
     user = request.user
@@ -89,8 +93,9 @@ def preceptor(request):
     else:
         return redirect('login')
 
-def preceptorPracticumPlanApproval(request, practicum_plan_id):
-    studentPlan = PracticumPlan.objects.get(id=practicum_plan_id)
+
+def preceptorPracticumPlanApproval(request, practicumplan_id):
+    studentPlan = PracticumPlan.objects.get(id=practicumplan_id)
     if 'approve' in request.get_full_path():
         studentPlan.preceptor_approval = True
         studentPlan.save()
@@ -98,13 +103,16 @@ def preceptorPracticumPlanApproval(request, practicum_plan_id):
     else:
         return render(request, 'preceptor/projectplanapproval.html', {'plan': studentPlan})
 
+
 def preceptorMidpointApproval(request, midpointevaluation_i):
     response = "Preceptor Midpoint Evaluation Approval"
     return HttpResponse(response)
 
+
 def preceptorFinalEvalution(request, preceptor_final_evaluation_id):
     response = "Preceptor Practicum Plan Approval"
     return HttpResponse(response)
+
 
 def preceptorSelfEvaluation(request, preceptor_evaluation_id='None'):
     response = "Student Preceptor Evaluation"
@@ -114,25 +122,61 @@ def preceptorSelfEvaluation(request, preceptor_evaluation_id='None'):
     PRACTICUM DIRECTOR VIEWS
 """
 
+
 def practicumDirector(request):
-    response = "Practicum Director Homepage"
-    return HttpResponse(response)
+    user = request.user
+    if user.is_authenticated and str(user.groups.first()) == 'PracticumDirectors':
+        authPD = PracticumDirector.objects.all().filter(user_data_id=user.id).first()
+        allPlans = PracticumPlan.objects.all().filter(practicum_director=authPD.id)
+        context = {
+            'name': user.get_full_name(),
+            'pendingPlans': allPlans.all().filter(pd_approval=None),
+            'pendingPreceptor': allPlans.all().filter(preceptor_approval=None, pd_approval='True'),
+            'activePlans': allPlans.all().filter(preceptor_approval=True, pd_approval=True),
+            'userType': 'practicum director'
+        }
+        return render(request, 'practicum-director/index.html', context)
+    else:
+        return redirect('login')
+
 
 def practicumDirectorPlanApproval(request, projectplan_id):
-    response = "Practicum Director Plan Approval"
-    return HttpResponse(response)
+    studentPlan = PracticumPlan.objects.get(id=projectplan_id)
+    # Update student's plan
+    if request.method == 'POST':
+        submittedForm = StudentPlanForm(instance=PracticumPlan.objects.get(id=projectplan_id), data=request.POST)
+        if submittedForm.is_valid():
+            submittedForm.save()
+            return HttpResponseRedirect('/practicum-director')
+    # Approve Student Plan
+    if 'practicum-director/approve' in request.get_full_path():
+        studentPlan.pd_approval = True
+        studentPlan.save()
+        return HttpResponseRedirect('/practicum-director')
+    elif 'preceptor/approve' in request.get_full_path():
+        studentPlan.preceptor_approval = True
+        studentPlan.save()
+        return HttpResponseRedirect('/practicum-director')
+    # Access Student Plan
+    else:
+        form = StudentPlanForm(instance=PracticumPlan.objects.get(id=projectplan_id))
+        return render(request, 'practicum-director/projectplan.html', {'form': form, 'plan': studentPlan, 'userType': 'practicum director'})
+
 
 def practicumMidpointEvaluationApproval(request, midpointevaluation_id):
     response = "Practicum Director Midpoint Evaluation Approval"
     return HttpResponse(response)
 
+
 def practicumFinalEvaluationApproval(request, finalevaluation_id):
     response = "Practicum Director Final Evaluation Approval"
     return HttpResponse(response)
 
+
 def siteRegistrationApproval(request, reg_id):
     response = "PD Site Approval"
     return HttpResponse(response)
+
 
 def preceptorRegistrationApproval(request, reg_id):
     response = "PD Preceptor Approval"

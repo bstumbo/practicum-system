@@ -1,0 +1,19 @@
+{% extends 'general/base.html' %}
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+{% block content %}
+    <div class="container-fluid">
+        <h1 class="mt-4">Project plan</h1>
+        {% if plan.pd_approval == None %}
+            <a href="/practicum-director/practicum-plan/approve/{{ plan.id }}" class="btn btn-primary">Approve</a>
+        {% endif %}
+        {% if plan.preceptor_approval == None %}
+            <a href="/preceptor/practicum-plan/approve/{{ plan.id }}" class="btn btn-primary">Approve Plan as Employer</a>
+        {% endif %}
+        <form action="{{ action }}" method="post">
+        {% csrf_token %}
+            {{ form.as_p }}
+        <input type="submit" value="submit">
+        </form>
+    </div>
+{% endblock content %}
