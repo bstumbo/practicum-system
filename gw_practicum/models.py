@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -35,6 +36,7 @@ class PracticumDirector(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
 
 class Site(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     address1 = models.CharField(max_length=255)
@@ -69,6 +71,7 @@ class Student(models.Model):
     PRACTICUM PLAN MODELS 
 """
 class PracticumPlan(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
     department = models.ForeignKey(Department, on_delete=models.CASCADE, null=False)
     competencies = models.TextField(null=False)
@@ -77,6 +80,7 @@ class PracticumPlan(models.Model):
     l_obj3 = models.TextField(null=True)
     l_obj4 = models.TextField(null=True)
     l_obj5 = models.TextField(null=True)
+    total_hours = models.DecimalField(decimal_places=1, max_digits=3, null=False, default=0.0)
     request_on = models.DateField(auto_now=False, auto_now_add=True)
     updated = models.DateField(auto_now=True, auto_now_add=False)
     agreement = models.BooleanField()
@@ -91,6 +95,7 @@ class PracticumPlan(models.Model):
     MIDPOINT EVALUATION MODELS 
 """
 class MidpointEvaluation(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     competencies = models.TextField(null=False)
     l_obj1 = models.TextField(null=False)
     l_activities1 = models.TextField(null=False)
@@ -114,6 +119,7 @@ class MidpointEvaluation(models.Model):
     STUDENT SELF EVALUATION MODELS
 """
 class StudentSelfEvaluation(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     class Evals(models.IntegerChoices):
         EXCELLENT = 1
         GOOD = 2
@@ -136,6 +142,7 @@ class StudentSelfEvaluation(models.Model):
     FINAL EVALUATION MODELS
 """
 class PreceptorFinalEvaluation(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     class Evals(models.IntegerChoices):
         EXCELLENT = 1
         GOOD = 2
@@ -156,3 +163,16 @@ class PreceptorFinalEvaluation(models.Model):
     pd_approval = models.BooleanField()
     request_on = models.DateField(auto_now=False, auto_now_add=True)
     updated = models.DateField(auto_now=True, auto_now_add=False)
+
+
+# Hour Tracking Models
+
+
+class Hours(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    practicum = models.ForeignKey(PracticumPlan, on_delete=models.CASCADE, null=False)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=False)
+    start_date = models.DateField(auto_now=False, auto_now_add=False)
+    end_date = models.DateField(auto_now=False, auto_now_add=False)
+    hours = models.DecimalField(decimal_places=1, max_digits=3, null=False)
+    tasks = models.TextField(null=False)
