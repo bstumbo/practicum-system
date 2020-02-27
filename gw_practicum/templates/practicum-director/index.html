@@ -66,8 +66,8 @@
                             </tr>
                         </tfoot>
                         <tbody>
-                            {% if pendingPlans %}
-                                {% for plan in pendingPlans %}
+                            {% if pendingPreceptor %}
+                                {% for plan in pendingPreceptor %}
                                     <tr>
                                         <td><a href="practicum-director/practicum-plan/{{ plan.id }}">{{ plan.title }}</a></td>
                                         <td>{{ plan.pd_approval }}</td>

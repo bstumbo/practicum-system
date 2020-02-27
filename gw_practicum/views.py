@@ -131,7 +131,7 @@ def practicumDirector(request):
         context = {
             'name': user.get_full_name(),
             'pendingPlans': allPlans.all().filter(pd_approval=None),
-            'pendingPreceptor': allPlans.all().filter(preceptor_approval=None, pd_approval='True'),
+            'pendingPreceptor': allPlans.all().filter(preceptor_approval=None, pd_approval=True),
             'activePlans': allPlans.all().filter(preceptor_approval=True, pd_approval=True),
             'userType': 'practicum director'
         }
@@ -149,11 +149,11 @@ def practicumDirectorPlanApproval(request, projectplan_id):
             submittedForm.save()
             return HttpResponseRedirect('/practicum-director')
     # Approve Student Plan
-    if 'practicum-director/approve' in request.get_full_path():
+    if 'pdapprove' in request.get_full_path() and str(request.user.groups.first()) == 'PracticumDirectors':
         studentPlan.pd_approval = True
         studentPlan.save()
         return HttpResponseRedirect('/practicum-director')
-    elif 'preceptor/approve' in request.get_full_path():
+    elif 'precepapprove' in request.get_full_path() and str(request.user.groups.first()) == 'PracticumDirectors':
         studentPlan.preceptor_approval = True
         studentPlan.save()
         return HttpResponseRedirect('/practicum-director')
