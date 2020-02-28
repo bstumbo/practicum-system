@@ -17,3 +17,9 @@ class TrackHoursForm(forms.ModelForm):
     class Meta:
         model = Hours
         fields = '__all__'
+        widgets = {
+            'start_date': forms.DateTimeInput(attrs={'class': 'datetime-input'}),
+            'end_date': forms.DateTimeInput(attrs={'class': 'datetime-input'}),
+            'practicum': forms.HiddenInput(),
+            'student': forms.HiddenInput()
+        }

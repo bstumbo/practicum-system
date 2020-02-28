@@ -170,8 +170,8 @@ class PreceptorFinalEvaluation(models.Model):
 
 class Hours(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    practicum = models.ForeignKey(PracticumPlan, on_delete=models.CASCADE, null=False)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=False)
+    practicum = models.ForeignKey(PracticumPlan, on_delete=models.CASCADE, null=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
     start_date = models.DateField(auto_now=False, auto_now_add=False)
     end_date = models.DateField(auto_now=False, auto_now_add=False)
     hours = models.DecimalField(decimal_places=1, max_digits=3, null=False)

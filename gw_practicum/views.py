@@ -1,13 +1,16 @@
 from django.http import HttpResponse
+from django.http import JsonResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.shortcuts import redirect
 from .forms import StudentPlanForm
+from .forms import TrackHoursForm
 from .models import PracticumPlan
 from .models import Preceptor
 from .models import PracticumDirector
 from .models import Site
 from .models import Student
+from .models import Hours
 
 
 def index(request):
@@ -184,11 +187,28 @@ def preceptorRegistrationApproval(request, reg_id):
 
 # HOURS TRACKING VIEWS
 def hours(request, projectplan_id):
-    response = "hours added"
-    return render(request, 'general/trackhours.html')
+    planHours = Hours.objects.all().filter(practicum_id=projectplan_id)
+    student = Student.objects.all().filter(user_data_id=request.user.id).first()
+    practicum = PracticumPlan.objects.get(id=projectplan_id)
+    context = {
+        'planHours': planHours,
+        'addHoursForm': TrackHoursForm(initial={'student': student.id, 'practicum': practicum.id})
+    }
+    return render(request, 'general/trackhours.html', context)
 
-def addHours(request):
-    return HttpResponseRedirect('/student')
+def addHours(request, projectplan_id):
+    if request.method == 'POST':
+        submittedHours = TrackHoursForm(request.POST)
+        if submittedHours.is_valid():
+            submittedHours.save()
+        else:
+            print(submittedHours.errors)
+    return JsonResponse({'response': 'response'})
+
+
+def editHours(request, projectplan_id, hours_id):
+    return HttpResponse('success')
+
 
 def removeHours(request):
     return HttpResponseRedirect('/student')
