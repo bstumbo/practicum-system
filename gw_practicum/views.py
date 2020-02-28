@@ -183,7 +183,7 @@ def preceptorRegistrationApproval(request, reg_id):
     return HttpResponse(response)
 
 # HOURS TRACKING VIEWS
-def hours(request):
+def hours(request, projectplan_id):
     response = "hours added"
     return render(request, 'general/trackhours.html')
 

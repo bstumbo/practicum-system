@@ -34,7 +34,9 @@
                                         <td>{{ plan.pd_approval }}</td>
                                         <td>{{ plan.preceptor_approval }}</td>
                                         <td>TBD</td>
-                                        <td><a href="student/practicum-plan/{{ plan.id }}">Edit</a></td>
+                                        <td><a href="student/practicum-plan/{{ plan.id }}">Edit</a><br>
+                                            <a href="student/practicum-plan/{{ plan.id }}/track-hours">Track Hours</a>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                             {% endif %}
