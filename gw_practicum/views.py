@@ -181,3 +181,14 @@ def siteRegistrationApproval(request, reg_id):
 def preceptorRegistrationApproval(request, reg_id):
     response = "PD Preceptor Approval"
     return HttpResponse(response)
+
+# HOURS TRACKING VIEWS
+def hours(request):
+    response = "hours added"
+    return render(request, 'general/trackhours.html')
+
+def addHours(request):
+    return HttpResponseRedirect('/student')
+
+def removeHours(request):
+    return HttpResponseRedirect('/student')

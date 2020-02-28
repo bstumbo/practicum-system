@@ -1,0 +1,13 @@
+{% extends 'general/base.html' %}
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+{% block content %}
+    <div class="container-fluid">
+        <h1 class="mt-4">Track Hours</h1>
+        <form action="{{ action }}" method="post">
+        {% csrf_token %}
+            {{ form.as_p }}
+        <input type="submit" value="submit">
+        </form>
+    </div>
+{% endblock content %}
