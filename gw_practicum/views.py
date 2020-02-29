@@ -201,8 +201,14 @@ def addHours(request, projectplan_id):
         submittedHours = TrackHoursForm(request.POST)
         if submittedHours.is_valid():
             submittedHours.save()
+            practicum = PracticumPlan.objects.get(id=projectplan_id)
+            hours = Hours.objects.all().filter(practicum=projectplan_id)
+            totalHours = sum(hour.hours for hour in hours)
+            practicum.total_hours = totalHours
+            practicum.save()
         else:
             print(submittedHours.errors)
+
     return JsonResponse({'response': 'response'})
 
 
