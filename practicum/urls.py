@@ -64,4 +64,6 @@ urlpatterns = [
                  name='practicum-director-site-registration-approval'),
     path('practicum-director/preceptor/<int:reg_id>', views.preceptorRegistrationApproval,
                  name='practicum-director-preceptor-approval'),
+    # Hours Paths
+    path('remove/<uuid:hours_id>', views.removeHours, name='remove-hours'),
 ]

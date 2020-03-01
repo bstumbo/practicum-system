@@ -216,5 +216,7 @@ def editHours(request, projectplan_id, hours_id):
     return HttpResponse('success')
 
 
-def removeHours(request):
-    return HttpResponseRedirect('/student')
+def removeHours(request, hours_id):
+    hours = Hours.objects.get(id=hours_id)
+    hours.delete()
+    return JsonResponse({'response': 'response'})
