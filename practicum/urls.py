@@ -32,6 +32,7 @@ urlpatterns = [
     path('student/practicum-plan/<uuid:projectplan_id>/track-hours', views.hours, name='student-plan-hours'),
     path('student/practicum-plan/<uuid:projectplan_id>/track-hours-form', views.hours, name='student-plan-hours-form'),
     path('student/practicum-plan/<uuid:projectplan_id>/add-hours', views.addHours, name='student-plan-hours-form'),
+    path('remove/<uuid:projectplan_id>/<uuid:hours_id>', views.removeHours, name='remove-hours'),
     path('student/midpoint', views.studentMidpoint, name='student-midpoint-form'),
     path('student/midpoint/<uuid:midpointevaluation_id', views.studentMidpoint, name='student-midpoint'),
     path('student/self-evaluation', views.studentSelfEvaluation, name='student-self-evaluation-form'),
@@ -64,6 +65,4 @@ urlpatterns = [
                  name='practicum-director-site-registration-approval'),
     path('practicum-director/preceptor/<int:reg_id>', views.preceptorRegistrationApproval,
                  name='practicum-director-preceptor-approval'),
-    # Hours Paths
-    path('remove/<uuid:hours_id>', views.removeHours, name='remove-hours'),
 ]

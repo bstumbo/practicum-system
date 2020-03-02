@@ -192,7 +192,8 @@ def hours(request, projectplan_id):
     practicum = PracticumPlan.objects.get(id=projectplan_id)
     context = {
         'planHours': planHours,
-        'addHoursForm': TrackHoursForm(initial={'student': student.id, 'practicum': practicum.id})
+        'addHoursForm': TrackHoursForm(initial={'student': student.id, 'practicum': practicum.id}),
+        'practicum': practicum
     }
     return render(request, 'general/trackhours.html', context)
 
@@ -202,21 +203,20 @@ def addHours(request, projectplan_id):
         if submittedHours.is_valid():
             submittedHours.save()
             practicum = PracticumPlan.objects.get(id=projectplan_id)
-            hours = Hours.objects.all().filter(practicum=projectplan_id)
-            totalHours = sum(hour.hours for hour in hours)
-            practicum.total_hours = totalHours
-            practicum.save()
+            practicum.calcTotalHours()
         else:
             print(submittedHours.errors)
 
-    return JsonResponse({'response': 'response'})
+    return HttpResponseRedirect('/student/practicum-plan/' + str(projectplan_id) + '/track-hours')
 
 
 def editHours(request, projectplan_id, hours_id):
     return HttpResponse('success')
 
 
-def removeHours(request, hours_id):
+def removeHours(request, projectplan_id, hours_id):
     hours = Hours.objects.get(id=hours_id)
     hours.delete()
+    practicum = PracticumPlan.objects.get(id=projectplan_id)
+    practicum.calcTotalHours()
     return JsonResponse({'response': 'response'})

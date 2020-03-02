@@ -91,6 +91,13 @@ class PracticumPlan(models.Model):
     preceptor = models.ForeignKey(Preceptor, on_delete=models.CASCADE, null=False)
     practicum_director = models.ForeignKey(PracticumDirector, on_delete=models.CASCADE, null=False)
 
+    def calcTotalHours(self):
+        hours = Hours.objects.all().filter(practicum=self.id)
+        totalHours = sum(hour.hours for hour in hours)
+        self.total_hours = totalHours
+        self.save()
+
+
 """
     MIDPOINT EVALUATION MODELS 
 """
