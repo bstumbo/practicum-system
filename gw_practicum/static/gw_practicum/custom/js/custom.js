@@ -2,15 +2,25 @@
   Modal Logic
  */
 $('.close').on('click', function() {
-  $('.modal').toggle();
+  $('.modal').hide();
 });
 
 $('#addHoursButton').on('click', function () {
-  $.ajax({
-            url: "track-hours-form",
-    success: function(result){
     $('#addHoursModal').toggle();
-  }});
+});
+
+$('.deleteHours').on('click', function() {
+    hoursId = $(this).data('id');
+    practicum = $(this).data('practicum');
+    $('#removeHoursModal').toggle();
+    $('#deleteHoursAffirm').on('click', function() {
+        $.ajax({
+            url: "/remove/" + practicum + '/' + hoursId,
+            success: function(result){
+            console.log(result)
+                window.location.reload();
+        }});
+    });
 });
 
 /*

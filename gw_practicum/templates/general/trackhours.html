@@ -32,7 +32,7 @@
                                     <td>{{ hours.hours }}</td>
                                     <td>{{ hours.tasks }}</td>
                                     <td><a href="/">Edit</a><br>
-                                        <a href="/">Delete</a>
+                                        <a class="deleteHours" data-id="{{ hours.id }}" data-practicum="{{ practicum.id }}" href="javascript:void(0)">Delete</a>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -43,4 +43,5 @@
         </div>
     </div>
     {% include 'modals/trackhoursmodal.html' with form=addHoursForm %}
+    {% include 'modals/removehoursmodal.html' %}
 {% endblock content %}
