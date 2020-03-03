@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.shortcuts import redirect
+from django.forms.models import model_to_dict
 from .forms import StudentPlanForm
 from .forms import TrackHoursForm
 from .models import PracticumPlan
@@ -59,7 +60,7 @@ def studentPlan(request, projectplan_id='None'):
         form = StudentPlanForm(instance=PracticumPlan.objects.get(id=projectplan_id))
     else:
         form = StudentPlanForm()
-    return render(request, 'student/projectplan.html', {'form': form, 'action': action})
+    return render(request, 'student/projectplan.html', {'form': form, 'action': action, 'userType': 'student'})
 
 
 def studentMidpoint(request, midpointevaluation_id='None'):
@@ -104,7 +105,7 @@ def preceptorPracticumPlanApproval(request, practicumplan_id):
         studentPlan.save()
         return HttpResponseRedirect('/preceptor')
     else:
-        return render(request, 'preceptor/projectplanapproval.html', {'plan': studentPlan})
+        return render(request, 'preceptor/projectplanapproval.html', {'plan': studentPlan, 'userType': 'preceptor'})
 
 
 def preceptorMidpointApproval(request, midpointevaluation_i):
@@ -193,13 +194,17 @@ def hours(request, projectplan_id):
     context = {
         'planHours': planHours,
         'addHoursForm': TrackHoursForm(initial={'student': student.id, 'practicum': practicum.id}),
-        'practicum': practicum
+        'practicum': practicum,
+        'userType': 'student'
     }
     return render(request, 'general/trackhours.html', context)
 
 def addHours(request, projectplan_id):
     if request.method == 'POST':
-        submittedHours = TrackHoursForm(request.POST)
+        if 'hours_id' in request.POST:
+            submittedHours = TrackHoursForm(instance=Hours.objects.get(id=request.POST['hours_id']), data=request.POST)
+        else:
+            submittedHours = TrackHoursForm(request.POST)
         if submittedHours.is_valid():
             submittedHours.save()
             practicum = PracticumPlan.objects.get(id=projectplan_id)
@@ -210,8 +215,9 @@ def addHours(request, projectplan_id):
     return HttpResponseRedirect('/student/practicum-plan/' + str(projectplan_id) + '/track-hours')
 
 
-def editHours(request, projectplan_id, hours_id):
-    return HttpResponse('success')
+def editHours(request, hours_id):
+    hours = model_to_dict(Hours.objects.get(id=hours_id))
+    return JsonResponse({'hours': hours})
 
 
 def removeHours(request, projectplan_id, hours_id):

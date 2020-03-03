@@ -31,7 +31,7 @@
                                     <td>{{ hours.start_date }} - {{ hours.end_date }}</td>
                                     <td>{{ hours.hours }}</td>
                                     <td>{{ hours.tasks }}</td>
-                                    <td><a href="/">Edit</a><br>
+                                    <td><a class="editHours" data-id="{{ hours.id }}" href="javascript:void(0)">Edit</a><br>
                                         <a class="deleteHours" data-id="{{ hours.id }}" data-practicum="{{ practicum.id }}" href="javascript:void(0)">Delete</a>
                                     </td>
                                 </tr>
